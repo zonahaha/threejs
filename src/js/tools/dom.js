@@ -1,4 +1,4 @@
-export function createElement(id, attrs) {
+export function createElement(id, attrs, initEvent = true) {
     let dom
     if (document.getElementById(id)) {
         dom = document.getElementById(id);
@@ -9,7 +9,7 @@ export function createElement(id, attrs) {
 
     }
     dom.style.touchAction = 'none';
-    dom.addEventListener('pointerdown', ev => onPointerDown(ev, attrs, dom))
+    initEvent && dom.addEventListener('pointerdown', ev => onPointerDown(ev, attrs, dom))
     return dom
 }
 
