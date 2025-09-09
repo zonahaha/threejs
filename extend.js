@@ -38,6 +38,7 @@
             echartsScript.onload = function() {
               console.log('ECharts 加载成功');
             document.body.appendChild(echartsScript);
+            resolve(true);
           };
           document.body.appendChild(script);
         };
