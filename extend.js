@@ -27,8 +27,7 @@
           script.onerror = function() {reject('Element UI加载失败')};
           script.onload = function() {
             // 注册element-ui到vue实例
-            vue.use(window.ELEMENT);
-            vue.use(ElementUI)
+            vue.use(ELEMENT);
             console.log('Element UI 加载成功');
             
             // 加载ECharts
