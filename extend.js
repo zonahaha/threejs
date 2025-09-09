@@ -21,14 +21,6 @@ window.BaitedaInit = async function(vue, type) {
     link.rel = "stylesheet";
     link.href = "https://unpkg.com/element-ui/lib/theme-chalk/index.css";
     document.head.appendChild(link);
-
-
-
-    const echarts = document.createElement('script')
-    echarts.src = 'https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js'
-    echarts.crossorigin = 'true'
-    echarts.onerror = function() {reject()}
-    document.body.appendChild(echarts)
     
     // 加载element-ui JS库
     const script = document.createElement('script');
@@ -37,11 +29,21 @@ window.BaitedaInit = async function(vue, type) {
     script.onerror = function() {reject()};
     script.onload = function() {
       // 注册element-ui到vue实例
-      window.ELEMENT&&vue.use(window.ELEMENT);
-      resolve(true);
+      vue.use(window.ELEMENT);
+     
     };
     document.body.appendChild(script);
 
+
+     const echarts = document.createElement('script')
+    echarts.src = 'https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js'
+    echarts.crossorigin = 'true'
+    echarts.onerror = function() {reject()}
+    echarts.onload = function() {
+      console.log('echarts 加载成功')
+      resolve(true);
+    }
+    document.body.appendChild(echarts)
     // 结束
   })
 }
