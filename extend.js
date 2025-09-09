@@ -42,7 +42,8 @@
           document.body.appendChild(script);
         };
         document.body.appendChild(vueScript);
-      })
+      }
+    })
     }
     
     /**
