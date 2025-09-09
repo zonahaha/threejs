@@ -8,7 +8,7 @@
       return new Promise(function (resolve, reject) {
         // 先加载Vue.js
         const vueScript = document.createElement('script');
-        vueScript.src = 'https://unpkg.com/vue@2/dist/vue.js';
+        vueScript.src = 'https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js';
         vueScript.crossorigin = 'true';
         vueScript.onerror = function() {reject('Vue加载失败')};
         vueScript.onload = function() {
@@ -28,6 +28,7 @@
           script.onload = function() {
             // 注册element-ui到vue实例
             vue.use(window.ELEMENT);
+            vue.use(ElementUI)
             console.log('Element UI 加载成功');
             
             // 加载ECharts
