@@ -1,66 +1,70 @@
 /**
-* 系统初始化时回调，可以注入三方脚本
-* @param {*} vue Vue实例
-* @param {*} type 有个参数值 desktop / mobile
-* @returns Promise / void
-*/
-window.BaitedaInit = async function(vue, type) {
+ * 系统初始化时回调，可以注入三方脚本
+ * @param {*} vue Vue实例
+ * @param {*} type 有个参数值 desktop / mobile
+ * @returns Promise / void
+ */
+window.BaitedaInit = async function (vue, type) {
   return new Promise(function (resolve, reject) {
-
-    const vueScript = document.createElement('script');
-    vueScript.src = 'https://unpkg.com/vue@2/dist/vue.js';
-    vueScript.crossorigin = 'true';
-    vueScript.onerror = function() {reject('Vue加载失败')};
-    vueScript.onload = function() {
-
-        console.log('vue 加载成功')
-    }
-
-    // 加载element-ui CSS样式
+    // 加载Element Plus CSS样式
     const link = document.createElement('link');
-    link.rel = "stylesheet";
-    link.href = "https://unpkg.com/element-ui/lib/theme-chalk/index.css";
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/element-plus/dist/index.css';
     document.head.appendChild(link);
-    
-    // 加载element-ui JS库
+
+    // 加载Element Plus JS库
     const script = document.createElement('script');
-    script.src = 'https://unpkg.com/element-ui/lib/index.js';
+    script.src = 'https://unpkg.com/element-plus/dist/index.full.js';
     script.crossorigin = 'true';
-    script.onerror = function() {reject()};
-    script.onload = function() {
-      // 注册element-ui到vue实例
-      vue.use(window.ELEMENT);
-     
+    script.onerror = function () {
+      reject('Element UI加载失败');
+    };
+      script.onload = function () {
+        console.log('Element Plus 加载成功');
+        console.log('vue', vue);
+        
+        // 注册Element Plus
+        if (window.ElementPlus) {
+          try {
+            vue.use(window.ElementPlus);
+            console.log('Element Plus 注册成功');
+          } catch (error) {
+            console.error('Element Plus 注册失败:', error);
+          }
+        } else {
+          console.warn('window.ElementPlus 不存在');
+        }
+      
+      // 加载ECharts
+      const echarts = document.createElement('script');
+      echarts.src = 'https://fe-resource.baiteda.com/libs/echarts-5.3.2/echarts.min.js';
+      echarts.onload = function () {
+        console.log('echarts 加载成功');
+        resolve(true);
+      };
+      echarts.onerror = function () {
+        console.warn('ECharts加载失败，继续执行');
+        resolve(true);
+      };
+      document.body.appendChild(echarts);
     };
     document.body.appendChild(script);
-
-
-     const echarts = document.createElement('script')
-    echarts.src = 'https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js'
-    echarts.crossorigin = 'true'
-    echarts.onerror = function() {reject()}
-    echarts.onload = function() {
-      console.log('echarts 加载成功')
-      resolve(true);
-    }
-    document.body.appendChild(echarts)
-    // 结束
-  })
-}
+  });
+};
 
 /**
-* 用户身份认证时回调，仅在私有化环境中启用
-* @param {*} user 用户对象
-* @param {*} tenant 租户对象
-*/
-window.BaitedaLogin = function(user, tenant) {}
+ * 用户身份认证时回调，仅在私有化环境中启用
+ * @param {*} user 用户对象
+ * @param {*} tenant 租户对象
+ */
+window.BaitedaLogin = function (user, tenant) {};
 
 /**
-* 页面全局路由变更时回调，仅在私有化环境中启用
-* @param {*} to 目标页面
-* @param {*} from 当前页面
-*/
-window.BaitedaRouterChanged = function(to, from) {}
+ * 页面全局路由变更时回调，仅在私有化环境中启用
+ * @param {*} to 目标页面
+ * @param {*} from 当前页面
+ */
+window.BaitedaRouterChanged = function (to, from) {};
 
 /**
  * 平台关闭页面的行为干预
@@ -72,7 +76,7 @@ window.BaitedaRouterChanged = function(to, from) {}
  *   appLauncher: boolean;
  * }
  */
-window.BaitedaClose = function(params) {}
+window.BaitedaClose = function (params) {};
 
 /**
  * 全局注入请求头额外参数
@@ -80,7 +84,9 @@ window.BaitedaClose = function(params) {}
  * @param {*} headers 请求头信息
  * @returns 返回的对象就会被注入到请求头部
  */
-window.BaitedaRequestHeaders = function(headers) {return headers}
+window.BaitedaRequestHeaders = function (headers) {
+  return headers;
+};
 
 /**
  * 创建单据、浏览页面、编辑页面，以iframe形式打开，会通过此函数获取到url，进行预处理。如：qiankun等微前端地址替换的处理
@@ -90,9 +96,9 @@ window.BaitedaRequestHeaders = function(headers) {return headers}
  * }
  * @returns true(表示继续向下执行之前代码) | false(表示不继续执行下面的代码逻辑, 直接返回)
  */
-window.BaitedaOpenOperateUrl = function(params) {
-	return true
-}
+window.BaitedaOpenOperateUrl = function (params) {
+  return true;
+};
 
 /**
  * 修改标签页title的行为干预
@@ -101,9 +107,9 @@ window.BaitedaOpenOperateUrl = function(params) {
  * }
  * @returns true(表示继续向下执行之前代码) | false(表示不继续执行下面的代码逻辑, 直接返回)
  */
-window.BaitedaUpdateCurrentTab = function(params) {
-  return false
-}
+window.BaitedaUpdateCurrentTab = function (params) {
+  return false;
+};
 
 /**
  * 全局注入外部干预样式
@@ -111,28 +117,29 @@ window.BaitedaUpdateCurrentTab = function(params) {
  * 已废弃⚠️⚠️⚠️⚠️
  */
 
-window.BaitedaCustomStyle = function() {
-	return {
-		"list-view-aggrid": {
-			"footer": {
-				"height": 30
-			}
-		}
-	}
-}
-
+window.BaitedaCustomStyle = function () {
+  return {
+    'list-view-aggrid': {
+      footer: {
+        height: 30,
+      },
+    },
+  };
+};
 
 /**
  * 创建单据、浏览页面、编辑页面，以iframe形式打开，会通过此函数获取到url，进行预处理。如：qiankun等微前端地址替换的处理
  * 版本提供 4.2.0
- * @param url 
+ * @param url
  * @param method: 'create' | 'edit' | 'read'
  * @returns url地址
  */
-window.BaitedaGetIframeUrl = function(url, method) {return url}
+window.BaitedaGetIframeUrl = function (url, method) {
+  return url;
+};
 
 //4.0.0版本提供
-window.baitedaCustomFileSupportOnlineView = function(file, type, device) {
+window.baitedaCustomFileSupportOnlineView = function (file, type, device) {
   /**
   file: {
     "tenant_id": "testqw",
@@ -149,11 +156,14 @@ window.baitedaCustomFileSupportOnlineView = function(file, type, device) {
   type: 'isSupport' | 'getUrl'
   device: 'desktop' | 'mobile'
   */
-  if (type === 'isSupport') {return false}
-  else if (type === 'getUrl') {return 'https://www.sina.com.cn'}
-}
+  if (type === 'isSupport') {
+    return false;
+  } else if (type === 'getUrl') {
+    return 'https://www.sina.com.cn';
+  }
+};
 
 //5.2.0+版本提供  调用utils工具集
 window.BaitedaUtilsMounted = async function (utils) {
- // 这里可以获取utils函数，调用服务等
+  // 这里可以获取utils函数，调用服务等
 };
