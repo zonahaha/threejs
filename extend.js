@@ -23,6 +23,32 @@ window.BaitedaInit = async function(vue, type) {
       resolve(true);
     };
     document.body.appendChild(script);
+
+
+    const echarts = document.createElement('script')
+    echarts.src = 'https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js'
+    echarts.crossorigin = 'true'
+    echarts.onerror = function() {reject()}
+    echarts.onload = function() {
+      // 已经获取到 window.echarts，此处可以做一些全局设置
+      // window.echarts
+      
+      const vconsole = document.createElement('script')
+      vconsole.src = 'https://byteluck.oss-cn-beijing.aliyuncs.com/libs/vconsole/vconsole-3.12.1.min.js'
+      vconsole.crossorigin = 'true'
+      vconsole.onerror = function() {reject()}
+      vconsole.onload = function() {
+        // 已经获取到 window.vconsole，此处可以做一些全局设置
+        var vConsole = new window.VConsole();
+        resolve(true)	//多个引用的话， resolve(true)放在最后一个
+      }
+      document.body.appendChild(vconsole)
+
+    }
+    document.body.appendChild(echarts)
+    // 结束
+
+    
   })
 }
 
