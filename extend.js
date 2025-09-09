@@ -1,6 +1,4 @@
-export default {
-    // add some codes here
-    }/**
+/**
     * 系统初始化时回调，可以注入三方脚本
     * @param {*} vue Vue实例
     * @param {*} type 有个参数值 desktop / mobile
